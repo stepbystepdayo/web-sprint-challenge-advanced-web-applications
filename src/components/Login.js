@@ -1,20 +1,69 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 
 const Login = () => {
+  const defaultcredentials = {
+    username: "",
+    password: "",
+  };
+  const [credentials, setCredentials] = useState(defaultcredentials);
+
+  const login = (event) => {
+    event.preventDefault();
+    //hit the login with post request
+    if (
+      credentials.username === "Lambda" &&
+      credentials.password === "School"
+    ) {
+      return axios
+        .post("http://localhost:5000/api/login", credentials)
+        .then((res) => {
+          console.log(res);
+          localStorage.setItem("token", res.data.payload);
+        })
+        .catch((err) => console.log(err));
+      //if you success, store the token. if you failed you will return login page
+    } else {
+      return console.log("This is not correct");
+    }
+  };
+
+  const handleChange = (event) => {
+    setCredentials({ ...credentials, [event.target.name]: event.target.value });
+  };
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
 
-  const error = "";
+  const error = "Username or Password not valid";
   //replace with error state
 
   return (
     <div>
       <h1>Welcome to the Bubble App!</h1>
       <div data-testid="loginForm" className="login-form">
-        <h2>Build login form here</h2>
+        <form onSubmit={login}>
+          <input
+            type="text"
+            name="username"
+            onChange={handleChange}
+            id="username"
+            placeholder="Input Username"
+          />
+          <input
+            type="password"
+            name="password"
+            onChange={handleChange}
+            id="password"
+            placeholder="Input Passwords"
+          />
+          <button id="submit">Log In</button>
+        </form>
       </div>
-
-      <p id="error" className="error">{error}</p>
+      {(!credentials.username || !credentials.password) && (
+        <p id="error" className="error">
+          {error}
+        </p>
+      )}
     </div>
   );
 };
