@@ -1,20 +1,66 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { useHistory } from "react-router";
 
 const Login = () => {
+  const { push } = useHistory();
+  const defaultcredentials = {
+    username: "",
+    password: "",
+  };
+  const [credentials, setCredentials] = useState(defaultcredentials);
+
+  const login = (event) => {
+    event.preventDefault();
+    //hit the login with post request
+
+    return axios
+      .post("http://localhost:5000/api/login", credentials)
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem("token", res.data.payload);
+        push("/bubblepage");
+      })
+      .catch((err) => console.log(err));
+    //if you success, store the token. if you failed you will return login page
+  };
+
+  const handleChange = (event) => {
+    setCredentials({ ...credentials, [event.target.name]: event.target.value });
+  };
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
 
-  const error = "";
+  const error = "Username or Password not valid";
   //replace with error state
 
   return (
-    <div>
+    <div className="login-form">
       <h1>Welcome to the Bubble App!</h1>
       <div data-testid="loginForm" className="login-form">
-        <h2>Build login form here</h2>
-      </div>
+        <form onSubmit={login}>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            onChange={handleChange}
+            placeholder="Input Username"
+          />
+          <input
+            id="password"
+            type="password"
+            name="password"
+            onChange={handleChange}
+            placeholder="Input Passwords"
+          />
 
-      <p id="error" className="error">{error}</p>
+          <p id="error" className="error">
+            {error}
+          </p>
+
+          <button id="submit">Log In</button>
+        </form>
+      </div>
     </div>
   );
 };
