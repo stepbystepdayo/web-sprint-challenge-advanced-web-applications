@@ -28,9 +28,8 @@ function App() {
             logout
           </a>
         </header>
-
+        <PrivateRoute path="/bubbles" component={BubblePage} />
         <Route exact path="/" component={Login} />
-        <PrivateRoute path="/bubblepage" component={BubblePage} />
       </div>
     </Router>
   );
