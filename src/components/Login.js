@@ -1,7 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 
 const Login = () => {
+  const { push } = useHistory();
   const defaultcredentials = {
     username: "",
     password: "",
@@ -11,21 +13,16 @@ const Login = () => {
   const login = (event) => {
     event.preventDefault();
     //hit the login with post request
-    if (
-      credentials.username === "Lambda" &&
-      credentials.password === "School"
-    ) {
-      return axios
-        .post("http://localhost:5000/api/login", credentials)
-        .then((res) => {
-          console.log(res);
-          localStorage.setItem("token", res.data.payload);
-        })
-        .catch((err) => console.log(err));
-      //if you success, store the token. if you failed you will return login page
-    } else {
-      return console.log("This is not correct");
-    }
+
+    return axios
+      .post("http://localhost:5000/api/login", credentials)
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem("token", res.data.payload);
+        push("/bubblepage");
+      })
+      .catch((err) => console.log(err));
+    //if you success, store the token. if you failed you will return login page
   };
 
   const handleChange = (event) => {
@@ -38,32 +35,32 @@ const Login = () => {
   //replace with error state
 
   return (
-    <div>
+    <div className="login-form">
       <h1>Welcome to the Bubble App!</h1>
       <div data-testid="loginForm" className="login-form">
         <form onSubmit={login}>
           <input
+            id="username"
             type="text"
             name="username"
             onChange={handleChange}
-            id="username"
             placeholder="Input Username"
           />
           <input
+            id="password"
             type="password"
             name="password"
             onChange={handleChange}
-            id="password"
             placeholder="Input Passwords"
           />
+
+          <p id="error" className="error">
+            {error}
+          </p>
+
           <button id="submit">Log In</button>
         </form>
       </div>
-      {(!credentials.username || !credentials.password) && (
-        <p id="error" className="error">
-          {error}
-        </p>
-      )}
     </div>
   );
 };

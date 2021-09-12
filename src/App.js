@@ -5,26 +5,32 @@ import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import BubblePage from "./components/BubblePage";
 import "./styles.scss";
+import axios from "axios";
+import axiosWithAuth from "./helpers/axiosWithAuth";
 
 function App() {
   const logout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "http://localhost:3000/login";
+    axiosWithAuth()
+      .post("logout")
+      .then(() => {
+        localStorage.removeItem("token");
+        window.location.href = "http://localhost:3000/login";
+      });
   };
   return (
     <Router>
       <div className="App">
         <header>
           Color Picker Sprint Challenge
-          <Link to="/login">LogIn</Link>
-          <Link to="/bubblepage">Bubble Page</Link>
+          {/* <Link to="/login">LogIn</Link>
+          <Link to="/bubblepage">Bubble Page</Link> */}
           <a onClick={logout} data-testid="logoutButton" href="#">
             logout
           </a>
         </header>
-        <PrivateRoute exact path="/bubblepage" component={BubblePage} />
-        <Route path="/login" component={Login} />
-        <Route path="/" />
+
+        <Route exact path="/" component={Login} />
+        <PrivateRoute path="/bubblepage" component={BubblePage} />
       </div>
     </Router>
   );
