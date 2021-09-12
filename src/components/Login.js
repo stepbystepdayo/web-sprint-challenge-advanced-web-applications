@@ -19,7 +19,7 @@ const Login = () => {
       .then((res) => {
         console.log(res);
         localStorage.setItem("token", res.data.payload);
-        push("/bubblepage");
+        push("/bubbles");
       })
       .catch((err) => console.log(err));
     //if you success, store the token. if you failed you will return login page
