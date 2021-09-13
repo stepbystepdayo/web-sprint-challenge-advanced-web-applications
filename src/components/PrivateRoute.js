@@ -15,7 +15,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         } else {
           console.log("no token");
           alert("You do not have the token! Please log in! 😊");
-          return <Redirect to="/login" />;
+          return <Redirect to="/" />;
         }
       }}
     />
