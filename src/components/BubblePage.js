@@ -25,7 +25,7 @@ const BubblePage = () => {
     axiosWithAuth()
       .put(`colors/${editColor.id}`, editColor)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         data();
       });
   };
@@ -34,7 +34,7 @@ const BubblePage = () => {
     axiosWithAuth()
       .delete(`colors/${colorToDelete.id}`)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         data();
       });
   };
